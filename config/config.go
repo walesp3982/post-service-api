@@ -30,7 +30,7 @@ func convertInt(value string) int {
 	return convert
 }
 
-func NewAppConfig() AppConfig {
+func New() AppConfig {
 	godotenv.Load()
 
 	databaseUrl := getEnvVariable("DATABASE_URL")

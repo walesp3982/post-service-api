@@ -1,12 +1,11 @@
 package main
 
 import (
-	"log"
-	"os"
+	"context"
+	"walesp3982/golang-post-api/config"
 	"walesp3982/golang-post-api/model"
 	"walesp3982/golang-post-api/pkg"
 
-	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -26,17 +25,30 @@ func getDBConnection(url string) *gorm.DB {
 
 func main() {
 	pkg.GetLogger().Info("Gettings variables environment")
-	if err := godotenv.Load(); err != nil {
-		log.Fatal("Cannot load .env")
-	}
+	config := config.New()
 
-	dsn := os.Getenv("DATABASE_URL")
-	db := getDBConnection(dsn)
+	db := getDBConnection(config.DatabaseUrl)
 	if db == nil {
 		return
 	}
 
 	pkg.GetLogger().Info("Migrating db")
-	db.AutoMigrate(&model.User{}, &model.Post{}, &model.RefreshToken{})
 
+	if err := db.AutoMigrate(&model.User{}, &model.Post{}, &model.RefreshToken{}); err != nil {
+		pkg.GetLogger().Warn("Error into migrate db")
+		pkg.GetLogger().Warn(err.Error())
+	}
+	user := model.NewUser("juan", "j@gmail.com", "password")
+
+	ctx := context.Background()
+
+	pkg.GetLogger().Info("Creating user")
+	err := gorm.G[model.User](db).Create(ctx, &user)
+
+	if err != nil {
+		pkg.GetLogger().Error("Cannot create user")
+		pkg.GetLogger().Error(err.Error())
+		return
+	}
+	pkg.GetLogger().Info("User created")
 }
