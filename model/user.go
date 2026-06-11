@@ -9,10 +9,10 @@ import (
 )
 
 type User struct {
-	Id             uuid.UUID
-	Name           string
-	Email          string `gorm:"uniqueIndex"`
-	HashedPassword string
+	Id             uuid.UUID `gorm:"type:uuid"`
+	Name           string    `gorm:"type:varchar(50);not null"`
+	Email          string    `gorm:"uniqueIndex;type:varchar(100);not null"`
+	HashedPassword string    `gorm:"uniqueIndex;type:varchar(255);not null"`
 	CreatedAt      time.Time
 	UpdatedAt      time.Time
 	DeletedAt      gorm.DeletedAt

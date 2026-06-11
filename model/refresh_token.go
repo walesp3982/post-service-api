@@ -9,10 +9,10 @@ import (
 )
 
 type RefreshToken struct {
-	Id        uuid.UUID
-	UserId    uuid.UUID
-	Token     string `gorm:"uniqueIndex"`
-	Revolked  bool
+	Id        uuid.UUID `gorm:"type:uuid"`
+	UserId    uuid.UUID `gorm:"type:uuid;not null"`
+	Token     string    `gorm:"uniqueIndex;varchar(255);not null"`
+	Revolked  bool      `gorm:"not null"`
 	CreatedAt time.Time
 	ExpiredAt time.Time
 	User      User `gorm:"constraint:OnDelete:CASCADE"`
