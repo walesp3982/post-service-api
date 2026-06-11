@@ -15,6 +15,7 @@ type RefreshToken struct {
 	Revolked  bool
 	CreatedAt time.Time
 	ExpiredAt time.Time
+	User      User `gorm:"constraint:OnDelete:CASCADE"`
 }
 
 func (r RefreshToken) isExpired() bool {

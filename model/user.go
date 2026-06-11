@@ -16,6 +16,8 @@ type User struct {
 	CreatedAt      time.Time
 	UpdatedAt      time.Time
 	DeletedAt      gorm.DeletedAt
+	Posts          []Post
+	RefreshToken   []RefreshToken
 }
 
 func (u *User) VerifyPassword(password string) bool {

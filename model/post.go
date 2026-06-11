@@ -17,4 +17,5 @@ type Post struct {
 	CreatedAt   time.Time
 	DeleteAt    gorm.DeletedAt
 	Status      string
+	User        User `gorm:"constraint:OnDelete:CASCADE"`
 }
