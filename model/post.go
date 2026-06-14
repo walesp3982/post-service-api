@@ -10,11 +10,12 @@ import (
 type Post struct {
 	Id          uuid.UUID `gorm:"type:uuid"`
 	UserId      uuid.UUID `gorm:"type:uuid;not null"`
-	Title       string    `gorm:"type:varchar(255);not null"`
-	Slug        string    `gorm:"uniqueIndex;type:varchar(255);not null"`
+	Title       string    `gorm:"type:varchar(255);not null;index:idx_title"`
+	Slug        string    `gorm:"uniqueIndex;type:varchar(255);not null;idx_slug"`
 	Content     string
-	PublishedAt time.Time
+	PublishedAt time.Time `gorm:"index:idx_published"`
 	CreatedAt   time.Time
+	UpdateAt    time.Time
 	DeleteAt    gorm.DeletedAt
 	User        User `gorm:"constraint:OnDelete:CASCADE"`
 }
