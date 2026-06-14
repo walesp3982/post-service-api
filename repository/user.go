@@ -12,8 +12,8 @@ type DBUser struct {
 	db *gorm.DB
 }
 
-func NewDBUser(db *gorm.DB) DBUser {
-	return DBUser{
+func NewDBUser(db *gorm.DB) *DBUser {
+	return &DBUser{
 		db: db,
 	}
 }
@@ -43,4 +43,8 @@ func (u *DBUser) Update(ctx context.Context, user *model.User) error {
 func (u *DBUser) Delete(ctx context.Context, id uuid.UUID) error {
 	_, err := gorm.G[model.User](u.db).Where("id = ?", id.String()).Delete(ctx)
 	return err
+}
+
+func NewUserRepository(db *gorm.DB) UserRepository {
+	return NewDBUser(db)
 }
