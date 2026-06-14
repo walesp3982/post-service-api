@@ -19,7 +19,7 @@ type RefreshTokenRepository interface {
 	Save(ctx context.Context, token *model.RefreshToken) error
 	GetByToken(ctx context.Context, token string) *model.RefreshToken
 	Update(ctx context.Context, token *model.RefreshToken) error
-	Delete(ctx context.Context, id uuid.UUID) *model.RefreshToken
+	Delete(ctx context.Context, id uuid.UUID) error
 }
 
 type PostRepository interface {
