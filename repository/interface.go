@@ -10,6 +10,7 @@ import (
 type UserRepository interface {
 	Save(ctx context.Context, user *model.User) error
 	GetById(ctx context.Context, id uuid.UUID) *model.User
+	GetByEmail(ctx context.Context, email string) *model.User
 	GetAll(ctx context.Context) []model.User
 	Update(ctx context.Context, user *model.User) error
 	Delete(ctx context.Context, id uuid.UUID) error

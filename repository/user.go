@@ -30,6 +30,14 @@ func (u *DBUser) GetById(ctx context.Context, id uuid.UUID) *model.User {
 	return &user
 }
 
+func (u *DBUser) GetByEmail(ctx context.Context, email string) *model.User {
+	user, err := gorm.G[model.User](u.db).Where("email = ?", email).First(ctx)
+	if err != nil {
+		return nil
+	}
+	return &user
+}
+
 func (u *DBUser) GetAll(ctx context.Context) []model.User {
 	users, _ := gorm.G[model.User](u.db).Find(ctx)
 	return users

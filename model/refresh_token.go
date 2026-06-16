@@ -54,3 +54,8 @@ func NewRefreshToken(userId uuid.UUID, hours int64) RefreshToken {
 		Revolked:  false,
 	}
 }
+
+func (r *RefreshToken) IsValid() bool {
+	return !r.Revolked && r.isExpired()
+
+}
