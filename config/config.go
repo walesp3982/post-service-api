@@ -10,8 +10,8 @@ import (
 type AppConfig struct {
 	DatabaseUrl      string
 	JWTSecret        string
-	JWTAccessExpiry  int // In minutes
-	JWTRefreshExpiry int // In Hours
+	JWTAccessExpiry  uint // In minutes
+	JWTRefreshExpiry uint // In Hours
 }
 
 func getEnvVariable(key string) string {
@@ -22,12 +22,12 @@ func getEnvVariable(key string) string {
 	return value
 }
 
-func convertInt(value string) int {
-	convert, err := strconv.Atoi(value)
+func convertUint(value string) uint {
+	convert, err := strconv.ParseUint(value, 10, 64)
 	if err != nil {
 		panic(err)
 	}
-	return convert
+	return uint(convert)
 }
 
 func New() AppConfig {
@@ -35,8 +35,8 @@ func New() AppConfig {
 
 	databaseUrl := getEnvVariable("DATABASE_URL")
 	jwtSecret := getEnvVariable("JWT_SECRET")
-	jwtAccessExpiry := convertInt(getEnvVariable("JWT_ACCESS_EXPIRY"))
-	jwtRefreshExpiry := convertInt(getEnvVariable("JWT_REFRESH_EXPIRY"))
+	jwtAccessExpiry := convertUint(getEnvVariable("JWT_ACCESS_EXPIRY"))
+	jwtRefreshExpiry := convertUint(getEnvVariable("JWT_REFRESH_EXPIRY"))
 
 	return AppConfig{
 		DatabaseUrl:      databaseUrl,

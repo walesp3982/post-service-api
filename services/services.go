@@ -14,8 +14,8 @@ func New(repository repository.Repository, config config.AppConfig) Service {
 		Auth: *NewAuthService(
 			&repository.RefreshToken,
 			repository.User,
-			uint(config.JWTRefreshExpiry),
-			uint(config.JWTAccessExpiry),
+			config.JWTRefreshExpiry,
+			config.JWTAccessExpiry,
 			config.JWTSecret),
 	}
 }
