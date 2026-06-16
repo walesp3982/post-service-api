@@ -1,9 +1,13 @@
 package main
 
 import (
+	"log"
 	"walesp3982/golang-post-api/config"
 	"walesp3982/golang-post-api/database"
+	"walesp3982/golang-post-api/handler"
 	"walesp3982/golang-post-api/pkg"
+	"walesp3982/golang-post-api/repository"
+	"walesp3982/golang-post-api/services"
 )
 
 func main() {
@@ -22,4 +26,8 @@ func main() {
 	pkg.GetLogger().Info("Running all migrations")
 	database.RunMigration(db)
 
+	repository := repository.New(db)
+	services := services.New(repository, config)
+	server := handler.New(services)
+	log.Fatal(server.Listen(":3000"))
 }

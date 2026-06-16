@@ -72,7 +72,7 @@ func (a *AuthService) GetAccessToken(ctx context.Context, token string) (string,
 	}
 
 	// Get user
-	user := (*a.userRepository).GetById(ctx, refreshToken.Id)
+	user := (*a.userRepository).GetById(ctx, refreshToken.UserId)
 
 	if user == nil {
 		return "", errors.New("User not found")
@@ -93,7 +93,7 @@ func (a *AuthService) GetAccessToken(ctx context.Context, token string) (string,
 	return t, nil
 }
 
-func (a *AuthService) RegisterUser(ctx context.Context, name string, email string, password string) (*model.User, error) {
+func (a *AuthService) Register(ctx context.Context, name string, email string, password string) (*model.User, error) {
 	user := model.NewUser(name, email, password)
 
 	// Check if email have not register in db
@@ -119,7 +119,7 @@ func (a *AuthService) Logout(ctx context.Context, token string) error {
 		return errors.New("token has expired")
 	}
 
-	refreshToken.Revolked = false
+	refreshToken.Revolked = true
 	err := (*a.repository).Update(ctx, refreshToken)
 	if err != nil {
 		return errors.New("Cannot update refreshToken")
