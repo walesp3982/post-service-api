@@ -7,12 +7,13 @@ import (
 	"github.com/gofiber/fiber/v3/middleware/logger"
 )
 
-func New(service services.Service) *fiber.App {
+func New(service services.Service, jwtSecret string) *fiber.App {
 	app := fiber.New()
 	app.Use(logger.New())
 	app.Get("/test", func(c fiber.Ctx) error {
 		return c.SendString("Hello world")
 	})
 	RoutesAuth(app, service.Auth)
+	RoutesUser(app, service.User, jwtSecret)
 	return app
 }

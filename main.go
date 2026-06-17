@@ -13,7 +13,6 @@ import (
 func main() {
 	pkg.GetLogger().Info("Gettings variables environment")
 	config := config.New()
-
 	// Get DB Connection
 	db, err := database.GetDBConnection(config.DatabaseUrl)
 	if err != nil {
@@ -28,6 +27,6 @@ func main() {
 
 	repository := repository.New(db)
 	services := services.New(repository, config)
-	server := handler.New(services)
+	server := handler.New(services, config.JWTSecret)
 	log.Fatal(server.Listen(":3000"))
 }
