@@ -14,7 +14,7 @@ type AuthService struct {
 	repository     *repository.RefreshTokenRepository
 	userRepository *repository.UserRepository
 	timeRefresh    uint // In hours
-	timeAcess      uint // In minutes
+	timeAccess     uint // In minutes
 	secretJWT      string
 }
 
@@ -22,7 +22,7 @@ func NewAuthService(
 	repo *repository.RefreshTokenRepository,
 	userRepo repository.UserRepository,
 	timeRefresh uint,
-	timeAcess uint,
+	timeAccess uint,
 	secretJWT string,
 
 ) *AuthService {
@@ -30,7 +30,7 @@ func NewAuthService(
 		repository:     repo,
 		userRepository: &userRepo,
 		timeRefresh:    timeRefresh,
-		timeAcess:      timeAcess,
+		timeAccess:     timeAccess,
 		secretJWT:      secretJWT,
 	}
 }
@@ -80,7 +80,7 @@ func (a *AuthService) GetAccessToken(ctx context.Context, token string) (string,
 	claims := jwt.MapClaims{
 		"name": user.Name,
 		"sub":  user.Id.String(),
-		"exp":  time.Now().Add(time.Duration(a.timeAcess)).Unix(),
+		"exp":  time.Now().Add(time.Duration(a.timeAccess) * time.Minute).Unix(),
 		"iat":  time.Now().Unix(),
 	}
 
