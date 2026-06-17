@@ -7,6 +7,7 @@ import (
 
 type Service struct {
 	Auth AuthService
+	User UserService
 }
 
 func New(repository repository.Repository, config config.AppConfig) Service {
@@ -17,5 +18,8 @@ func New(repository repository.Repository, config config.AppConfig) Service {
 			config.JWTRefreshExpiry,
 			config.JWTAccessExpiry,
 			config.JWTSecret),
+		User: *NewUserService(
+			repository.User,
+		),
 	}
 }
