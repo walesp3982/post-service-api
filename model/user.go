@@ -24,6 +24,11 @@ func (u *User) VerifyPassword(password string) bool {
 	return pkg.VerifyPassword(u.HashedPassword, password)
 }
 
+func (u *User) ChangePassword(newPassword string) {
+	hash := pkg.HashPassword(newPassword)
+	u.HashedPassword = hash
+}
+
 func NewUser(name string, email string, password string) User {
 	uuid, err := uuid.NewV7()
 	if err != nil {
