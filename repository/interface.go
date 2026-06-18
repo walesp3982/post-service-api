@@ -28,7 +28,7 @@ type PostRepository interface {
 	GetById(ctx context.Context, id uuid.UUID) *model.Post
 	GetByUser(ctx context.Context, userId uuid.UUID) []model.Post
 	Update(ctx context.Context, post *model.Post) error
-	Delete(ctx context.Context, id int) error
+	Delete(ctx context.Context, id uuid.UUID) error
 	GetAllLastest(ctx context.Context, offset uint, limit uint) []model.Post
 	GetAllByTitle(ctx context.Context, ilike string, limit uint) []model.Post
 	GetBySlug(ctx context.Context, slug string) *model.Post

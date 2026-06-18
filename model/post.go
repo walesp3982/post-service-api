@@ -17,5 +17,20 @@ type Post struct {
 	CreatedAt   time.Time
 	UpdateAt    time.Time
 	DeleteAt    gorm.DeletedAt
-	User        User `gorm:"constraint:OnDelete:CASCADE"`
+	User        *User `gorm:"constraint:OnDelete:CASCADE" json:"user,omitempty"`
+}
+
+func NewPost(userId uuid.UUID, title string, slug string, content string) Post {
+	uuid, err := uuid.NewV7()
+	if err != nil {
+		panic(err)
+	}
+	return Post{
+		Id:      uuid,
+		UserId:  userId,
+		Title:   title,
+		Slug:    slug,
+		Content: content,
+	}
+
 }
