@@ -15,5 +15,6 @@ func New(service services.Service, jwtSecret string) *fiber.App {
 	})
 	RoutesAuth(app, service.Auth)
 	RoutesUser(app, service.User, jwtSecret)
+	RoutesPost(app, service, jwtSecret)
 	return app
 }
