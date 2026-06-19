@@ -8,22 +8,22 @@ import (
 	"gorm.io/gorm"
 )
 
-type DBTask struct {
+type DBPost struct {
 	db *gorm.DB
 }
 
-func NewDBTask(db *gorm.DB) *DBTask {
-	return &DBTask{
+func NewDBTask(db *gorm.DB) *DBPost {
+	return &DBPost{
 		db: db,
 	}
 }
 
-func (d *DBTask) Save(ctx context.Context, post *model.Post) error {
+func (d *DBPost) Save(ctx context.Context, post *model.Post) error {
 	err := gorm.G[model.Post](d.db).Create(ctx, post)
 	return err
 }
 
-func (d *DBTask) GetById(ctx context.Context, id uuid.UUID) *model.Post {
+func (d *DBPost) GetById(ctx context.Context, id uuid.UUID) *model.Post {
 	post, err := gorm.G[model.Post](d.db).Preload("User", nil).Where("id = ?", id.String()).First(ctx)
 	if err != nil {
 		return nil
@@ -31,7 +31,7 @@ func (d *DBTask) GetById(ctx context.Context, id uuid.UUID) *model.Post {
 	return &post
 }
 
-func (d *DBTask) GetByUser(ctx context.Context, userId uuid.UUID) []model.Post {
+func (d *DBPost) GetByUser(ctx context.Context, userId uuid.UUID) []model.Post {
 	posts, err := gorm.G[model.Post](d.db).Where("user_id = ?", userId).Find(ctx)
 	if err != nil {
 		return []model.Post{}
@@ -39,17 +39,17 @@ func (d *DBTask) GetByUser(ctx context.Context, userId uuid.UUID) []model.Post {
 	return posts
 }
 
-func (d *DBTask) Update(ctx context.Context, post *model.Post) error {
+func (d *DBPost) Update(ctx context.Context, post *model.Post) error {
 	_, err := gorm.G[model.Post](d.db).Updates(ctx, *post)
 	return err
 }
 
-func (d *DBTask) Delete(ctx context.Context, id uuid.UUID) error {
+func (d *DBPost) Delete(ctx context.Context, id uuid.UUID) error {
 	_, err := gorm.G[model.Post](d.db).Where("id = ?", id).Delete(ctx)
 	return err
 }
 
-func (d *DBTask) GetAllLastest(ctx context.Context, offset uint, limit uint) []model.Post {
+func (d *DBPost) GetAllLastest(ctx context.Context, offset uint, limit uint) []model.Post {
 	posts, err := gorm.G[model.Post](d.db).Order("").Offset(int(offset)).Limit(int(limit)).Find(ctx)
 	if err != nil {
 		return []model.Post{}
@@ -57,7 +57,7 @@ func (d *DBTask) GetAllLastest(ctx context.Context, offset uint, limit uint) []m
 	return posts
 }
 
-func (d *DBTask) GetAllByTitle(ctx context.Context, ilike string, limit uint) []model.Post {
+func (d *DBPost) GetAllByTitle(ctx context.Context, ilike string, limit uint) []model.Post {
 	param := "%" + ilike + "%"
 	posts, err := gorm.G[model.Post](d.db).Where("title ILIKE ?", param).Limit(int(limit)).Find(ctx)
 	if err != nil {
@@ -66,7 +66,7 @@ func (d *DBTask) GetAllByTitle(ctx context.Context, ilike string, limit uint) []
 	return posts
 }
 
-func (d *DBTask) GetBySlug(ctx context.Context, slug string) *model.Post {
+func (d *DBPost) GetBySlug(ctx context.Context, slug string) *model.Post {
 	post, err := gorm.G[model.Post](d.db).Where("slug = ?", slug).First(ctx)
 	if err != nil {
 		return nil
@@ -74,8 +74,14 @@ func (d *DBTask) GetBySlug(ctx context.Context, slug string) *model.Post {
 	return &post
 }
 
+func (d *DBPost) CountPostUser(ctx context.Context, userId uuid.UUID) uint {
+	var count int64
+	d.db.Model(model.Post{}).Where("user_id = ?", userId).Count(&count)
+	return uint(count)
+}
+
 func NewDBPost(db *gorm.DB) PostRepository {
-	return &DBTask{
+	return &DBPost{
 		db: db,
 	}
 }

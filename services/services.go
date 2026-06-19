@@ -8,6 +8,7 @@ import (
 type Service struct {
 	Auth AuthService
 	User UserService
+	Post PostService
 }
 
 func New(repository repository.Repository, config config.AppConfig) Service {
@@ -21,5 +22,6 @@ func New(repository repository.Repository, config config.AppConfig) Service {
 		User: *NewUserService(
 			repository.User,
 		),
+		Post: *NewPostService(repository.Post),
 	}
 }

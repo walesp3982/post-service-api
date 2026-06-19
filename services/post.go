@@ -43,7 +43,7 @@ func (s *PostService) IsEditable(ctx context.Context, id uuid.UUID, userId uuid.
 	return post.UserId == userId
 }
 
-func (s *PostService) DeleteRepository(ctx context.Context, id uuid.UUID) error {
+func (s *PostService) Delete(ctx context.Context, id uuid.UUID) error {
 	return s.repository.Delete(ctx, id)
 }
 
@@ -55,8 +55,25 @@ func (s *PostService) ShowPostsUser(ctx context.Context, userId uuid.UUID) []mod
 	return s.repository.GetByUser(ctx, userId)
 }
 
-func (s *PostService) UpdatePost(ctx context.Context, post model.Post) error {
-	return s.repository.Update(ctx, &post)
+func (s *PostService) UpdatePost(ctx context.Context, id uuid.UUID, title string, content string, slugOptional *string) error {
+	post := s.repository.GetById(ctx, id)
+	if post == nil {
+		return errors.New("Post not found to updated")
+	}
+	var slug string
+	if slugOptional == nil {
+		slug = GenerateSlug(title)
+	} else {
+		slug = *slugOptional
+	}
+
+	if s.repository.GetBySlug(ctx, slug) != nil {
+		return errors.New("Slug was registered")
+	}
+	post.Content = content
+	post.Title = title
+	post.Slug = slug
+	return s.repository.Update(ctx, post)
 }
 
 func GenerateSlug(title string) string {

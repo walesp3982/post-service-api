@@ -32,4 +32,5 @@ type PostRepository interface {
 	GetAllLastest(ctx context.Context, offset uint, limit uint) []model.Post
 	GetAllByTitle(ctx context.Context, ilike string, limit uint) []model.Post
 	GetBySlug(ctx context.Context, slug string) *model.Post
+	CountPostUser(ctx context.Context, userId uuid.UUID) uint
 }
